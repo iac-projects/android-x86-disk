@@ -33,17 +33,11 @@
 # files which Android-x86 releases.
 # -------------------------------------------------
 
-FROM quay.io/quamotion/android-x86-base:6.0-r3 AS base
+FROM quay.io/quamotion/android-x86-base:5.1-rc1 AS base
 
 ENV image_name=android-x86
 
 WORKDIR /android
-# Apply the patches
-COPY *.patch .
-RUN apt-get update \
-&& apt-get install -y patch \
-&& patch -p1 < android-x86.patch \
-&& rm *.patch
 
 # Update the ramdisk and initrd images
 RUN mkbootfs ./ramdisk | gzip > ramdisk.img \
