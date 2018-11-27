@@ -1,6 +1,6 @@
 --- a/system/build.prop
 +++ b/system/build.prop
-@@ -65,7 +65,7 @@
+@@ -71,7 +71,7 @@
  ro.com.google.clientidbase.am=android-asus
  ro.com.google.clientidbase.gmm=android-asus
  ro.com.google.clientidbase.yt=android-asus
@@ -9,3 +9,4 @@
  ro.dalvik.vm.isa.arm=x86
  ro.enable.native.bridge.exec=1
  ro.dalvik.vm.isa.arm64=x86_64
+
