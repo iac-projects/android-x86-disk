@@ -39,10 +39,12 @@ ENV image_name=android-x86
 
 WORKDIR /android
 # Apply the patches
-COPY *.patch .
+COPY *.patch ./
 RUN apt-get update \
 && apt-get install -y patch \
-&& patch -p1 < android-x86.patch \
+&& patch -p1 < enable-adb.patch \
+&& patch -p1 < skip-setup.patch \
+&& cat system/build.prop \
 && rm *.patch
 
 # Update the ramdisk and initrd images
