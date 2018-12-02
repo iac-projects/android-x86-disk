@@ -3,3 +3,4 @@
 *.vhd
 *.qcow2
 kernel/
+docker
