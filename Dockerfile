@@ -38,6 +38,13 @@ FROM quay.io/quamotion/android-x86-base:7.1-r2 AS base
 ENV image_name=android-x86
 
 WORKDIR /android
+
+# Patch the kernel, if required
+# ENV kernel_version=4.20.0-rc4-android-x86_64-g29aa98beeaa9-dirty
+# COPY kernel/vmlinuz-$kernel_version .
+# COPY kernel/lib/modules/$kernel_version/kernel/ system/lib/modules/$kernel_version/kernel/
+# COPY kernel/lib/modules/$kernel_version/modules.* system/lib/modules/$kernel_version/
+
 # Apply the patches
 COPY *.patch ./
 RUN apt-get update \
