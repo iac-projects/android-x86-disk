@@ -1,3 +1,5 @@
 *.img
 *.vhd
 *.qcow2
+kernel/lib/modules/*/source
+kernel/lib/modules/*/build
