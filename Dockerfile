@@ -33,6 +33,18 @@
 # files which Android-x86 releases.
 # -------------------------------------------------
 
+FROM ubuntu:bionic AS kernel
+
+WORKDIR /android
+
+RUN apt-get update \
+&& apt-get install -y unzip curl
+
+RUN curl -JLO "https://dev.azure.com/KubeDroid/ae5ed413-99b5-452e-b0c8-bdb1aa465d10/_apis/build/builds/60/artifacts?artifactName=kernel-4.20rc4-gvt&api-version=5.0-preview.5&%24format=zip" \
+&& unzip kernel-4.20rc4-gvt.zip \
+&& mkdir -p kernel /\
+&& tar xvzf kernel-4.20rc4-gvt/kernel-4.20rc4-gvt.tar.gz -C kernel/
+
 FROM quay.io/quamotion/android-x86-base:7.1-r2 AS base
 
 ENV image_name=android-x86
@@ -40,10 +52,10 @@ ENV image_name=android-x86
 WORKDIR /android
 
 # Patch the kernel, if required
-# ENV kernel_version=4.20.0-rc4-android-x86_64-g29aa98beeaa9-dirty
-# COPY kernel/vmlinuz-$kernel_version .
-# COPY kernel/lib/modules/$kernel_version/kernel/ system/lib/modules/$kernel_version/kernel/
-# COPY kernel/lib/modules/$kernel_version/modules.* system/lib/modules/$kernel_version/
+ENV kernel_version=4.20.0-rc4-android-x86_64-g8a63ac5aa
+COPY --from=kernel /android/kernel/vmlinuz-$kernel_version .
+COPY --from=kernel /android/kernel/lib/modules/$kernel_version/kernel/ system/lib/modules/$kernel_version/kernel/
+COPY --from=kernel /android/kernel/lib/modules/$kernel_version/modules.* system/lib/modules/$kernel_version/
 
 # Apply the patches
 COPY *.patch ./

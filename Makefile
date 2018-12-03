@@ -1,4 +1,4 @@
-docker: Dockerfile
+docker: Dockerfile grub.cfg
 	sudo docker build . -t quay.io/quamotion/android-x86-disk:7.1-r2
 	sudo docker image ls --format "{{.ID}}" quay.io/quamotion/android-x86-disk:7.1-r2 > docker
 
