@@ -1,6 +1,6 @@
 docker: Dockerfile
 	sudo docker build . -t quay.io/quamotion/android-x86-disk:7.1-r2
-	docker image ls --format "{{.ID}}" quay.io/quamotion/android-x86-disk:7.1-r2 > docker
+	sudo docker image ls --format "{{.ID}}" quay.io/quamotion/android-x86-disk:7.1-r2 > docker
 
 run: docker
 	sudo docker run --rm -it $$(cat docker) /bin/bash
@@ -18,4 +18,6 @@ qemu: android-x86.qcow2
 	     -serial stdio \
 	     -display egl-headless -vnc :0 \
 	     -device vfio-pci,sysfsdev=/sys/bus/mdev/devices/a297db4a-f4c2-11e6-90f6-d3b88d6c9525,display=on \
+             -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::5000-:5555 \
 	     -hda android-x86.qcow2
+
