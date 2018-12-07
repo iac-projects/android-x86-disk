@@ -33,7 +33,7 @@
 # files which Android-x86 releases.
 # -------------------------------------------------
 
-FROM quay.io/quamotion/android-x86-base:8.1-rc2 AS base
+FROM quay.io/quamotion/android-x86-base:8.1-rc1 AS base
 
 ENV image_name=android-x86
 
