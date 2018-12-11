@@ -1,0 +1,11 @@
+--- a/ramdisk/init.android_x86_64.rc
++++ b/ramdisk/init.android_x86_64.rc
+@@ -103,6 +103,7 @@
+ on property:sys.boot_completed=1
+     write /proc/sys/kernel/ctrl-alt-del 0
+     exec u:r:init:s0 -- /system/bin/logwrapper /system/bin/sh /system/etc/init.sh bootcomplete
++    exec u:r:init:s0 -- /system/bin/logwrapper /system/bin/sh /system/etc/qm-bootcomplete.sh
+
+ on property:net.dns1=*
+     exec u:r:init:s0 -- /system/bin/logwrapper /system/bin/sh /system/etc/init.sh netconsole
+

@@ -47,15 +47,16 @@ WORKDIR /android
 
 # Apply the patches
 COPY *.patch ./
-RUN apt-get update \
-&& apt-get install -y patch \
-&& patch -p1 < enable-adb.patch \
+RUN patch -p1 < enable-adb.patch \
 && patch -p1 < skip-setup.patch \
+&& patch -p1 < postboot.patch \
 && cat system/build.prop \
 && rm *.patch
 
 # Remove the custom launcher
 RUN rm -rf system/priv-app/Taskbar
+
+COPY qm-bootcomplete.sh system/etc/
 
 # Update the ramdisk and initrd images
 RUN mkbootfs ./ramdisk | gzip > ramdisk.img \
