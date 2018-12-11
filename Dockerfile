@@ -60,6 +60,9 @@ RUN rm -rf system/priv-app/Taskbar
 
 # COPY qm-bootcomplete.sh system/etc/
 
+# Remove the custom launcher
+RUN rm -rf system/priv-app/Taskbar
+
 # Update the ramdisk and initrd images
 RUN mkbootfs ./ramdisk | gzip > ramdisk.img \
 && rm -rf ./ramdisk \
