@@ -33,11 +33,32 @@
 # files which Android-x86 releases.
 # -------------------------------------------------
 
+FROM quay.io/quamotion/android-x86-kernel:7.1-r2 AS kernel
+
 FROM quay.io/quamotion/android-x86-base:5.1-rc1 AS base
 
 ENV image_name=android-x86
 
 WORKDIR /android
+
+# Patch the kernel, if required
+ARG kernel_version=4.9.95-android-x86_64-kubedroid-guest
+COPY --from=kernel /android/kernel/vmlinuz-$kernel_version .
+COPY --from=kernel /android/kernel/lib/modules/$kernel_version/kernel/ system/lib/modules/$kernel_version/kernel/
+COPY --from=kernel /android/kernel/lib/modules/$kernel_version/modules.* system/lib/modules/$kernel_version/
+
+# Apply the patches
+# COPY *.patch ./
+# RUN patch -p1 < enable-adb.patch \
+# && patch -p1 < skip-setup.patch \
+# && patch -p1 < postboot.patch \
+# && cat system/build.prop \
+# && rm *.patch
+
+# Remove the custom launcher
+RUN rm -rf system/priv-app/Taskbar
+
+# COPY qm-bootcomplete.sh system/etc/
 
 # Update the ramdisk and initrd images
 RUN mkbootfs ./ramdisk | gzip > ramdisk.img \
