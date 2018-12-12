@@ -33,6 +33,8 @@
 # files which Android-x86 releases.
 # -------------------------------------------------
 
+FROM quay.io/quamotion/android-x86-kernel:gvt-stable-4.17 AS kernel
+
 FROM quay.io/quamotion/android-x86-base:6.0-r3 AS base
 
 ENV image_name=android-x86
@@ -40,10 +42,10 @@ ENV image_name=android-x86
 WORKDIR /android
 
 # Patch the kernel, if required
-# ENV kernel_version=4.20.0-rc4-android-x86_64-g29aa98beeaa9-dirty
-# COPY kernel/vmlinuz-$kernel_version .
-# COPY kernel/lib/modules/$kernel_version/kernel/ system/lib/modules/$kernel_version/kernel/
-# COPY kernel/lib/modules/$kernel_version/modules.* system/lib/modules/$kernel_version/
+ARG kernel_version=4.17.0-android-x86_64-kubedroid-guest
+COPY --from=kernel /android/kernel/vmlinuz-$kernel_version .
+COPY --from=kernel /android/kernel/lib/modules/$kernel_version/kernel/ system/lib/modules/$kernel_version/kernel/
+COPY --from=kernel /android/kernel/lib/modules/$kernel_version/modules.* system/lib/modules/$kernel_version/
 
 # Apply the patches
 COPY *.patch ./
