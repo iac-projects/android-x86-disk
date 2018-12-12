@@ -1,3 +1,5 @@
 *.img
 *.map
 *.vhd
+*.qcow2
+docker
