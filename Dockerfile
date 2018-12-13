@@ -33,17 +33,68 @@
 # files which Android-x86 releases.
 # -------------------------------------------------
 
+FROM quay.io/quamotion/android-x86-kernel:7.1-r2 AS kernel-7.1-r2
+FROM quay.io/quamotion/android-x86-kernel:8.1-rc1 AS kernel-8.1-rc1
+FROM quay.io/quamotion/android-x86-kernel:8.1-rc2 AS kernel-8.1-rc2
+FROM quay.io/quamotion/android-x86-kernel:kernel-4.13 AS kernel-4.13
+FROM quay.io/quamotion/android-x86-kernel:kernel-4.14 AS kernel-4.14
+FROM quay.io/quamotion/android-x86-kernel:kernel-4.15 AS kernel-4.15
+FROM quay.io/quamotion/android-x86-kernel:kernel-4.16 AS kernel-4.16
+FROM quay.io/quamotion/android-x86-kernel:kernel-4.17 AS kernel-4.17
+FROM quay.io/quamotion/android-x86-kernel:kernel-4.18 AS kernel-4.18
+FROM quay.io/quamotion/android-x86-kernel:gvt-stable-4.17 AS kernel-gvt-stable-4.17
+FROM quay.io/quamotion/android-x86-kernel:kernel-4.20rc6 AS kernel-4.20rc6
+
 FROM quay.io/quamotion/android-x86-base:8.1-rc1 AS base
 
 ENV image_name=android-x86
 
 WORKDIR /android
 
-# Patch the kernel, if required
-# ENV kernel_version=4.20.0-rc4-android-x86_64-g29aa98beeaa9-dirty
-# COPY kernel/vmlinuz-$kernel_version .
-# COPY kernel/lib/modules/$kernel_version/kernel/ system/lib/modules/$kernel_version/kernel/
-# COPY kernel/lib/modules/$kernel_version/modules.* system/lib/modules/$kernel_version/
+# Patch the kernel files
+COPY --from=kernel-7.1-r2 /android/kernel/vmlinuz-4.9.95-android-x86_64-kubedroid-guest .
+COPY --from=kernel-7.1-r2 /android/kernel/lib/modules/4.9.95-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.9.95-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-7.1-r2 /android/kernel/lib/modules/4.9.95-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.9.95-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-8.1-rc1 /android/kernel/vmlinuz-4.9.109-android-x86_64-kubedroid-guest .
+COPY --from=kernel-8.1-rc1 /android/kernel/lib/modules/4.9.109-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.9.109-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-8.1-rc1 /android/kernel/lib/modules/4.9.109-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.9.109-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-8.1-rc2 /android/kernel/vmlinuz-4.18.14-android-x86_64-kubedroid-guest .
+COPY --from=kernel-8.1-rc2 /android/kernel/lib/modules/4.18.14-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.18.14-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-8.1-rc2 /android/kernel/lib/modules/4.18.14-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.18.14-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-4.13 /android/kernel/vmlinuz-4.13.0-android-x86_64-kubedroid-guest .
+COPY --from=kernel-4.13 /android/kernel/lib/modules/4.13.0-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.13.0-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-4.13 /android/kernel/lib/modules/4.13.0-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.13.0-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-4.14 /android/kernel/vmlinuz-4.14.0-android-x86_64-kubedroid-guest .
+COPY --from=kernel-4.14 /android/kernel/lib/modules/4.14.0-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.14.0-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-4.14 /android/kernel/lib/modules/4.14.0-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.14.0-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-4.15 /android/kernel/vmlinuz-4.15.0-android-x86_64-kubedroid-guest .
+COPY --from=kernel-4.15 /android/kernel/lib/modules/4.15.0-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.15.0-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-4.15 /android/kernel/lib/modules/4.15.0-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.15.0-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-4.16 /android/kernel/vmlinuz-4.16.0-android-x86_64-kubedroid-guest .
+COPY --from=kernel-4.16 /android/kernel/lib/modules/4.16.0-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.16.0-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-4.16 /android/kernel/lib/modules/4.16.0-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.16.0-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-4.17 /android/kernel/vmlinuz-4.17.0-android-x86_64-kubedroid-guest .
+COPY --from=kernel-4.17 /android/kernel/lib/modules/4.17.0-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.17.0-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-4.17 /android/kernel/lib/modules/4.17.0-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.17.0-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-4.17 /android/kernel/vmlinuz-4.17.0-android-x86_64-kubedroid-guest .
+COPY --from=kernel-4.17 /android/kernel/lib/modules/4.17.0-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.17.0-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-4.17 /android/kernel/lib/modules/4.17.0-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.17.0-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-gvt-stable-4.17 /android/kernel/vmlinuz-4.17.0-android-x86_64-kubedroid-guest .
+COPY --from=kernel-gvt-stable-4.17 /android/kernel/lib/modules/4.17.0-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.17.0-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-gvt-stable-4.17 /android/kernel/lib/modules/4.17.0-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.17.0-android-x86_64-kubedroid-guest/
+
+COPY --from=kernel-4.20rc6 /android/kernel/vmlinuz-4.20.0-rc6-android-x86_64-kubedroid-guest .
+COPY --from=kernel-4.20rc6 /android/kernel/lib/modules/4.20.0-rc6-android-x86_64-kubedroid-guest/kernel/ system/lib/modules/4.20.0-rc6-android-x86_64-kubedroid-guest/kernel/
+COPY --from=kernel-4.20rc6 /android/kernel/lib/modules/4.20.0-rc6-android-x86_64-kubedroid-guest/modules.* system/lib/modules/4.20.0-rc6-android-x86_64-kubedroid-guest/
 
 # Apply the patches
 COPY *.patch ./
